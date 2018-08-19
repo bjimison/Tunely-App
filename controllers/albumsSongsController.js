@@ -1,4 +1,4 @@
-var db = require('../models');
+var db = require("../models");
 
 // GET '/api/albums/:albumId/songs'
 function index(req, res) {
@@ -10,7 +10,6 @@ function index(req, res) {
 // POST '/api/albums/:albumId/songs'
 function create(req, res) {
   db.Album.findById(req.params.album_id, function(err, foundAlbum) {
-    
     // dangerous – in a real app, we'd validate the incoming data
     var newSong = new db.Song(req.body);
 
@@ -18,7 +17,7 @@ function create(req, res) {
     foundAlbum.save(function(err, savedAlbum) {
       // responding with song in JSON
       // some APIs may respond with parent obj as well (e.g. foundAlbum)
-      res.json(newSong);  
+      res.json(newSong);
     });
   });
 }
@@ -33,7 +32,7 @@ function update(req, res) {
       correctSong.name = req.body.name;
 
       foundAlbum.save(function(err, saved) {
-        console.log('UPDATED', correctSong, 'IN ', saved.songs);
+        console.log("UPDATED", correctSong, "IN ", saved.songs);
         res.json(correctSong);
       });
     } else {
@@ -47,12 +46,12 @@ function destroy(req, res) {
   db.Album.findById(req.params.album_id, function(err, foundAlbum) {
     console.log(foundAlbum);
     // we've got the album, now find the song within it
-    var correctSong = foundAlbum.songs.id(req.params.song_id);
+    const correctSong = foundAlbum.songs.id(req.params.song_id);
     if (correctSong) {
       correctSong.remove();
       // resave the album now that the song is gone
       foundAlbum.save(function(err, saved) {
-        console.log('REMOVED ', correctSong.name, 'FROM ', saved.songs);
+        console.log("REMOVED ", correctSong.name, "FROM ", saved.songs);
         res.json(correctSong);
       });
     } else {
